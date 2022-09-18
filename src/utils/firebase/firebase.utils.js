@@ -14,10 +14,10 @@ import { doc,         // doc = nám umožňuje získať dokumenty v našej datab
          getDoc,      // get,setDoc - when we want access to data of this DOC, we need getDoc and setDoc
          setDoc,
          getFirestore,
-         collection,  // collection - allows us get collections as userDocRef
-         writeBatch, 
-         query,       // pre 
-         getDocs,     //
+         collection,  // collection - allows us get collections as userDocRef, ked pridavame nove kolekcie a dokumenty - func addCollectionAndDocuments
+         writeBatch,  // je pre uspesnu transakciu, aby vstky transakcie prebehli a priradili sa spravne
+         query,       
+         getDocs,     
         } from 'firebase/firestore'; //inicializacia, firestore = riadi nasu databazu
 
     const firebaseConfig = {
@@ -53,7 +53,7 @@ export const db = getFirestore();
 
     /* NAHODENIE PRODUKTOV DO FIREBASE*/
 
-// ASYNC pretoze pridávame do nášho externého zdroja, voláme tu na API, aby sme uložili dáta // collectionKey is like users in firestore cloud
+// ASYNC pretoze pridávame do nášho externého zdroja, voláme tu na API, aby sme uložili dáta // collectionKey argument is like users in firestore cloud(pomenovanie skupiny), 2.argument je JSON objekt
 export const addCollectionAndDocuments = async (collectionKey, objectsToAdd) => {
 
       const collectionRef = collection(db, collectionKey); //2. go with our DB instance as we know we did with Auth, SAYIN = dajte mi kolekciu v rámci DB a v rámci tejto DB ktoru kolkekciuKey hladame?

@@ -5,8 +5,24 @@ import Authentication from './routes/authentication/authentication.component';
 import Shop from "./routes/shop/shop.component";
 import Checkout from "./routes/checkout/checkout.component";
 
+import { useEffect } from "react";
+import { setCurrentUser } from "./store/user.action";
+import { createUserDocumentFromAuth, onAuthStateChangedListener} from "../../utils/firebase/firebase.utils";
+import { useDispatch } from "react-redux";
 
 const App = () => {
+  //efekt je spustený len na inicializáciu, aby sa nastavil listener
+  const dispatch = useDispatch();
+
+  useEffect(() => {                                         // when user signout we wanna store null, when signin we store user object
+    const unsubscribe = onAuthStateChangedListener((user) => {
+        if(user) { 
+            createUserDocumentFromAuth(user);
+        }
+        dispatch(setCurrentUser(user));
+    });  // i only want to run this func once when the component mounts []
+    return unsubscribe;   // const unsubscribe zastavi open listening z firebase, ked sa component unmount
+    }, [dispatch]);
   
   return (
     <Routes>  {/*aby sa nemuselo vrstvit /home/shop a dalej */}
